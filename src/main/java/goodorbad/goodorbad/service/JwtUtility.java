@@ -10,7 +10,7 @@ import java.util.Date;
 
 @Service
 public class JwtUtility {
-    private String secret="yourSecretKey";
+    private String secret="yourSecretKeyaokfosdfsoeifoifjosifjoisjdoifjosiejoijdovmldxggxxdgxd";
     private static final long EXPIRATION_TIME=1000L*60*60; //1시간
 
     //토큰생성
@@ -21,7 +21,7 @@ public class JwtUtility {
                 .setExpiration(new Date(System.currentTimeMillis()+EXPIRATION_TIME)) //토큰 만료시간
                 .signWith(SignatureAlgorithm.HS512, secret.getBytes(StandardCharsets.UTF_8))
                 //secret 값을 바이트로 변환 후, 비밀키로 사용
-                //jwt 서명 알고리즘 = ES512
+                //jwt 서명 알고리즘 = HS512
                 .compact();
     }
 
