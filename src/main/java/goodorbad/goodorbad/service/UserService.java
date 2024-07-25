@@ -17,13 +17,6 @@ public class UserService {
         return userRepository.findByUserId(jwtUtility.validateToken(token).getSubject());//userId 반환
     }
 
-    //회원 가입
-    public User signUp(String userId,String passwd,String name, String email){
-        User member=userRepository.findByUserId(userId); //userId인 member 객체가 있나 검사
-        if(member!=null) return null; //있다면 이미 있는 userId 이므로 등록시키면 안됨
-        return userRepository.save(new User(userId,passwd,name,email)); //데이터베이스에 새로운 member 객체를 저장
-    }
-
     //회원 탈퇴
     public boolean deleteUser(String token){
         User user=tokenToMember(token);
@@ -47,5 +40,9 @@ public class UserService {
         return member;
     }
 
-
+    public User signUp(String userId,String passwd,String nickname){
+        User member=userRepository.findByUserId(userId); //userId인 member 객체가 있나 검사
+        if(member!=null) return null; //있다면 이미 있는 userId 이므로 등록시키면 안됨
+        return userRepository.save(new User(userId,passwd,nickname)); //데이터베이스에 새로운 member 객체를 저장
+    }
 }
