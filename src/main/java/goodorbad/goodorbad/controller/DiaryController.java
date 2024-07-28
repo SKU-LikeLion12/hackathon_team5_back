@@ -1,5 +1,6 @@
 package goodorbad.goodorbad.controller;
 
+import goodorbad.goodorbad.DTO.DiaryDTO;
 import goodorbad.goodorbad.domain.Diary;
 import goodorbad.goodorbad.domain.User;
 import goodorbad.goodorbad.service.DiaryService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/diaries")
@@ -23,25 +25,23 @@ public class DiaryController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<Diary> createDiary(@RequestBody Diary diary, @RequestParam String userId) {
+    public DiaryDTO.diaryResponse createDiary(@RequestBody Diary diary, @RequestParam String userId) {
         User user = userService.findByUserId(userId);
-        if (user == null) {
-            return ResponseEntity.badRequest().body(null);
-        }
         diary.setUser(user);
-        Diary savedDiary = diaryService.saveDiary(diary);
-        return ResponseEntity.ok(savedDiary);
+        diaryService.saveDiary(diary);
+        return new DiaryDTO.diaryResponse(diary.getDate(),diary.getContent());
     }
 
     @GetMapping
-    public ResponseEntity<List<Diary>> getDiariesByDate(
+    public List<DiaryDTO.diaryResponse> getDiariesByDate(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestParam String userId) {
         User user = userService.findByUserId(userId);
-        if (user == null) {
-            return ResponseEntity.badRequest().body(null);
-        }
         List<Diary> diaries = diaryService.getDiariesByDate(date, user);
-        return ResponseEntity.ok(diaries);
+        List<DiaryDTO.diaryResponse> response = diaries.stream()
+                .map(diary -> new DiaryDTO.diaryResponse(diary.getDate(), diary.getContent()))
+                .collect(Collectors.toList());
+
+        return response;
     }
 }
