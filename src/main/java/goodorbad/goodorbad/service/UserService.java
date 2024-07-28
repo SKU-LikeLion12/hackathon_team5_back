@@ -1,11 +1,20 @@
 package goodorbad.goodorbad.service;
 
 import goodorbad.goodorbad.domain.User;
+import goodorbad.goodorbad.exception.EmailNotFoundException;
 import goodorbad.goodorbad.exception.IdNotFoundException;
+import goodorbad.goodorbad.exception.NameOrEmailNotFoundException;
+import goodorbad.goodorbad.exception.TokenExpiredException;
 import goodorbad.goodorbad.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.security.SignatureException;
+import java.util.Date;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +45,7 @@ public class UserService {
     //로그인 - 토큰 발급
     public String login(String userId, String password){
         User user=userRepository.findByUserId(userId);
+
         if(user!=null &&user.checkPassword(password)){
             return jwtUtility.generateToken(userId);
         }
@@ -44,7 +54,25 @@ public class UserService {
 
     public User findByUserId(String userId){
         User member= userRepository.findByUserId(userId);
-        if (member==null) throw new IdNotFoundException(); //만약 찾으려고한 userId가 존재하지 않는다면
+        if (member==null) throw new IdNotFoundException(); //아이디가 존재 하지 않을 때
         return member;
+    }
+
+    //이메일로 아이디 찾기
+    public String findUserIdByEmailAndName(String email,String name){
+        String userId=userRepository.findUserIdByEmailAndName(email,name);
+        if(userId==null) throw new NameOrEmailNotFoundException(); //이메일 혹은 이름이 존재 하지 않을 때
+        return userId;
+    }
+
+    //이메일로 유저 객체 찾기
+    public User findByEmail(String email){
+        User user=userRepository.findByEmail(email);
+        if (user==null) throw new EmailNotFoundException(); //이메일에 해당하는 유저가 없을 때
+        return user;
+    }
+
+    public void save(User user){
+        userRepository.save(user);
     }
 }
