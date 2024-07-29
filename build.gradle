@@ -40,6 +40,9 @@ dependencies {
 
 	annotationProcessor 'org.projectlombok:lombok' //error: variable em not initialized in the default constructorprivate final EntityManager em;
 
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0' //스웨거
+
+	implementation 'org.springframework.boot:spring-boot-starter-mail' //이메일 전송
 }
 
 tasks.named('test') {

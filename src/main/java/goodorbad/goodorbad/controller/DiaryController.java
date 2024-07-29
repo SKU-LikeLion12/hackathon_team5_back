@@ -1,5 +1,6 @@
 package goodorbad.goodorbad.controller;
 
+import goodorbad.goodorbad.DTO.DiaryDTO;
 import goodorbad.goodorbad.domain.Diary;
 import goodorbad.goodorbad.domain.User;
 import goodorbad.goodorbad.service.DiaryService;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/diaries")
@@ -24,29 +26,28 @@ public class DiaryController {
 
     // 새로운 다이어리 작성
     @PostMapping
-    public ResponseEntity<Diary> createDiary(@RequestBody Diary diary) {
-        // UserService를 사용하여 diary에 설정된 userId에 해당하는 사용자를 찾습니다.
-        User user = userService.findByUserId(diary.getUser().getUserId());
-        if (user == null) {
-            return ResponseEntity.badRequest().build();
-        }
+
+    public DiaryDTO.diaryResponse createDiary(@RequestBody Diary diary, @RequestParam String userId) {
+        User user = userService.findByUserId(userId);
+
         diary.setUser(user);
-        Diary savedDiary = diaryService.saveDiary(diary);
-        return ResponseEntity.ok(savedDiary);
+        diaryService.saveDiary(diary);
+        return new DiaryDTO.diaryResponse(diary.getDate(),diary.getContent());
     }
 
     // 특정 날짜와 사용자에 해당하는 다이어리 목록 조회
     @GetMapping
-    public ResponseEntity<List<Diary>> getDiariesByDate(
+    public List<DiaryDTO.diaryResponse> getDiariesByDate(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestParam String userId) {
         // userId로 사용자를 찾습니다.
         User user = userService.findByUserId(userId);
-        if (user == null) {
-            return ResponseEntity.badRequest().build();
-        }
         List<Diary> diaries = diaryService.getDiariesByDate(date, user);
-        return ResponseEntity.ok(diaries);
+        List<DiaryDTO.diaryResponse> response = diaries.stream()
+                .map(diary -> new DiaryDTO.diaryResponse(diary.getDate(), diary.getContent()))
+                .collect(Collectors.toList());
+
+        return response;
     }
 
     // 특정 다이어리 업데이트 (PUT 메서드)

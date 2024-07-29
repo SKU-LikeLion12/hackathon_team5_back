@@ -7,6 +7,7 @@ import jakarta.persistence.TypedQuery;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import javax.print.DocFlavor;
 import java.util.Optional;
 
 @Repository
@@ -25,17 +26,34 @@ public class UserRepository {
         em.remove(user);
     }
 
-//    //아이디 중복 확인 - 입력 받은 아이디를 데이터베이스에서 찾아서 동일한 아이디의 갯수 반환
-//    public Long CountByUserId(String userId){
-//        return em.createQuery("select count(*) from User u where u.userId=:ui",Long.class)
-//                .setParameter("ui",userId)
-//                .getSingleResult();
-//    }
-
+    //아이디로 사용자 찾기
     public User findByUserId(String userId){
         try{
             return em.createQuery("select u from User u where u.userId=:ui",User.class)
                     .setParameter("ui",userId)
+                    .getSingleResult();
+        }catch(NoResultException e){
+            return null;
+        }
+    }
+
+    //이메일로 아이디 찾기
+    public String findUserIdByEmailAndName(String email,String name){
+        try{
+            return em.createQuery("select u.userId from User u where u.email=:e and u.name=:n", String.class)
+                    .setParameter("e",email)
+                    .setParameter("n",name)
+                    .getSingleResult();
+        }catch(NoResultException e){
+            return null;
+        }
+    }
+
+    //비밀번호 찾기
+    public User findByEmail(String email){
+        try{
+            return em.createQuery("select u from User u where u.email=:e",User.class)
+                    .setParameter("e",email)
                     .getSingleResult();
         }catch(NoResultException e){
             return null;

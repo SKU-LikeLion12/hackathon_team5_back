@@ -1,6 +1,9 @@
 package goodorbad.goodorbad.controller;
 
+import goodorbad.goodorbad.exception.EmailNotFoundException;
 import goodorbad.goodorbad.exception.IdNotFoundException;
+import goodorbad.goodorbad.exception.NameOrEmailNotFoundException;
+import goodorbad.goodorbad.exception.TokenExpiredException;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,5 +26,20 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ExpiredJwtException.class) //JwtUtility Class 토큰이 만료 되었을 때
     public ResponseEntity<String> JwtExpire(Exception e){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰이 만료되었습니다.");
+    }
+
+    @ExceptionHandler(EmailNotFoundException.class) //UserService에서 이메일이 없을 때
+    public ResponseEntity<String> EmailNotFound(Exception e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 이메일입니다.");
+    }
+
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<String> TokenExpired(Exception e){
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰이 만료 되었습니다.");
+    }
+
+    @ExceptionHandler(NameOrEmailNotFoundException.class)
+    public ResponseEntity<String> IdOrEmailNotFoundException(Exception e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이름 혹은 이메일이 존재하지 않습니다.");
     }
 }
