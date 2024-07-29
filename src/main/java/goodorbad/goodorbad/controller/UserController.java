@@ -36,19 +36,19 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(token);
     }
 
-    //로그인
-    @Operation(summary = "로그인",description = "아이디, 비밀번호 입력하고 로그인 시도",tags={"user"},
-            responses={@ApiResponse(responseCode = "200", description = "로그인 성공 후 토큰 반환"),
-                    @ApiResponse(responseCode = "401",description = "아이디, 비밀번호 불일치로 로그인 실패")}
-    )
-    @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody UserDTO.UserLoginRequest request){
-        String token=userService.login(request.getUserId(), request.getPassword());
-        if (token==null)
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 혹은 비밀번호가 일치하지 않습니다.");
-        else
-            return ResponseEntity.status(HttpStatus.OK).body(token);
-    }
+//    //로그인
+//    @Operation(summary = "로그인",description = "아이디, 비밀번호 입력하고 로그인 시도",tags={"user"},
+//            responses={@ApiResponse(responseCode = "200", description = "로그인 성공 후 토큰 반환"),
+//                    @ApiResponse(responseCode = "401",description = "아이디, 비밀번호 불일치로 로그인 실패")}
+//    )
+//    @PostMapping("/login")
+//    public ResponseEntity<String> login(@RequestBody UserDTO.UserLoginRequest request){
+//        String token=userService.login(request.getUserId(), request.getPassword());
+//        if (token==null)
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("아이디 혹은 비밀번호가 일치하지 않습니다.");
+//        else
+//            return ResponseEntity.status(HttpStatus.OK).body(token);
+//    }
 
     //회원 탈퇴
     @Operation(summary = "회원 탈퇴",description = "토큰 입력 하고 회원 탈퇴 시도",tags={"user"},
