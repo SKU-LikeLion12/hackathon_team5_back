@@ -15,7 +15,7 @@ public class EmailService {
     public void sendPasswordResetEmail(String to, String token) {
         String subject = "GoodOrBad 웹 비밀번호 재설정";
         String text = "비밀번호를 재설정하려면 다음 링크를 클릭하세요: \n" +
-                "http://localhost:8080/reset-password.html?token=" + token; //서버 배포 후 해당 도메인으로 변경
+                "http://team5back.sku-sku.com/reset-password.html?token=" + token; //서버 배포 후 해당 도메인으로 변경
 
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(to);
