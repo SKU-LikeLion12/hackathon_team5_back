@@ -27,21 +27,21 @@ public class DiaryController {
     // 새로운 다이어리 작성
     @PostMapping
 
-    public DiaryDTO.diaryResponse createDiary(@RequestBody Diary diary, @RequestParam String userId) {
-        User user = userService.findByUserId(userId);
+    public DiaryDTO.diaryResponse createDiary(@RequestBody Diary diary, @RequestHeader("Authorization") String token) {
+        User user = userService.tokenToMember(token);
 
         diary.setUser(user);
         diaryService.saveDiary(diary);
         return new DiaryDTO.diaryResponse(diary.getDate(),diary.getContent());
     }
 
-    // 특정 날짜와 사용자에 해당하는 다이어리 목록 조회
+    // 날짜로 일기 찾기
     @GetMapping
     public List<DiaryDTO.diaryResponse> getDiariesByDate(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
-            @RequestParam String userId) {
+            @RequestHeader("Authorization") String token) {
         // userId로 사용자를 찾습니다.
-        User user = userService.findByUserId(userId);
+        User user = userService.tokenToMember(token);
         List<Diary> diaries = diaryService.getDiariesByDate(date, user);
         List<DiaryDTO.diaryResponse> response = diaries.stream()
                 .map(diary -> new DiaryDTO.diaryResponse(diary.getDate(), diary.getContent()))
@@ -49,7 +49,7 @@ public class DiaryController {
 
         return response;
     }
-
+/////////////////////////////////////////////////////
     // 특정 다이어리 업데이트 (PUT 메서드)
     @PutMapping("/{id}")
     public ResponseEntity<Diary> updateDiary(

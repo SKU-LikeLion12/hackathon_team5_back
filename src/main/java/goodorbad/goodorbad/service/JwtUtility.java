@@ -1,8 +1,10 @@
 package goodorbad.goodorbad.service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.stereotype.Service;
 
 import java.nio.charset.StandardCharsets;
@@ -26,23 +28,26 @@ public class JwtUtility {
     }
 
     //토큰 유효성 검사, 토큰에 관련된 사용자 또는 자원에 대한 정보를 제공
-    public Claims validateToken(String token){
+    public Claims validateToken(String token) {
         try {
             Claims claims = Jwts.parser()
                     .setSigningKey(secret.getBytes(StandardCharsets.UTF_8)) //검증을 위해 서명 키를 설정 secret
                     .parseClaimsJws(token) //제공된 토큰을 넣어서 파싱하고 검증
                     .getBody(); //검증이 성공하면 JWT에서 클레임을 추출
             return claims;
-        }catch(Exception ex){ //모든 예외를 null 찍고 예외 문장 출력하는 게 아니라, 모든 예외를 던짐
+        }
+        catch(Exception ex){
             throw ex;
         }
-//        }catch(SignatureException ex){
-//            System.out.println("Invalid JWT signature"); //서명 검증 실패
-//        }catch(ExpiredJwtException ex){
+//        } catch (SignatureException ex) {
+//            throw ex;
+////            System.out.println("Invalid JWT signature"); //서명 검증 실패
+//        } catch (ExpiredJwtException ex) {
+//            throw ex;
 //            System.out.println("Expired JWT token"); //토큰 만료
-//        }catch(Exception ex){
+//        } catch (Exception ex) {
+//            throw ex;
 //            System.out.println("Invalid JWT token"); //기타 예외
-//        }
 //        return null;
     }
 }
