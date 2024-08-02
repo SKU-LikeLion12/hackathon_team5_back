@@ -9,7 +9,7 @@ version = '0.0.1-SNAPSHOT'
 
 java {
 	toolchain {
-		languageVersion = JavaLanguageVersion.of(17)
+		languageVersion = JavaLanguageVersion.of(22) // Java 22에 맞게 수정
 	}
 }
 
@@ -20,29 +20,21 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.projectlombok:lombok:1.18.28'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-
-	implementation 'org.springframework.boot:spring-boot-starter-security' //보안 기능을 쉽게 사용할 수 있도록 도와주는 스타터 패키지
-//	implementation 'io.jsonwebtoken:jjwt:0.9.1' //jwt를 생성, 파싱하여 검증하는 기능 제공하는 라이브러리
-
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+	implementation 'org.projectlombok:lombok:1.18.28'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+	implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	annotationProcessor 'org.projectlombok:lombok'
 
-	implementation 'org.springframework.boot:spring-boot-starter'
-	runtimeOnly 'com.mysql:mysql-connector-j' //mysql 연결 설정
-
-	annotationProcessor 'org.projectlombok:lombok' //error: variable em not initialized in the default constructorprivate final EntityManager em;
-
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0' //스웨거
-
-	implementation 'org.springframework.boot:spring-boot-starter-mail' //이메일 전송
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.named('test') {
