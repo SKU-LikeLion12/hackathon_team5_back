@@ -21,7 +21,7 @@ public class GlobalExceptionHandler {
     }
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> Exception(Exception e){
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("토큰이 유효하지 않습니다.");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("토큰이 유효하지 않습니다."); // 변경사항
     }
 
     //디비에 없음
