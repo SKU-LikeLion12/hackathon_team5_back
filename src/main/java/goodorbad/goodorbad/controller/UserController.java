@@ -65,9 +65,18 @@ public class UserController {
     }
 
     //아이디 찾기 - 이름, 이메일
-    @PostMapping("/find/userId")
-    public String findUserIdByEmail(@RequestBody UserDTO.FindUserIdRequest request){
-        return userService.findUserIdByEmailAndName(request.getEmail(),request.getName());
+//    @GetMapping("/find/userId")
+//    public String findUserIdByEmail(@RequestBody UserDTO.FindUserIdRequest request){
+//        return userService.findUserIdByEmailAndName(request.getEmail(),request.getName());
+//    }
+    @PostMapping("/find/userId") // 수정된 부분
+    public ResponseEntity<String> findUserIdByEmailAndName(@RequestBody UserDTO.FindUserIdRequest request) {
+        String userId = userService.findUserIdByEmailAndName(request.getEmail(), request.getName());
+        if (userId != null) {
+            return ResponseEntity.ok(userId);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("사용자 ID를 찾을 수 없습니다");
+        }
     }
 
     //test
