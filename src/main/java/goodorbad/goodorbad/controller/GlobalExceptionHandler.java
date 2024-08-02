@@ -19,10 +19,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> JwtExpire(Exception e){
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("토큰이 만료되었습니다.");
     }
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> Exception(Exception e){
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("토큰이 유효하지 않습니다."); // 변경사항
-    }
+
 
     //디비에 없음
     @ExceptionHandler(IdNotFoundException.class)
@@ -42,6 +39,17 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NameOrEmailNotFoundException.class)
     public ResponseEntity<String> IdOrEmailNotFoundException(Exception e){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("이름 혹은 이메일이 존재하지 않습니다.");
+    }
+
+    //다이어리 수정
+    @ExceptionHandler(DateNotFoundException.class)
+    public ResponseEntity<String> DateNotFound(Exception e){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("일치하는 날짜가 없습니다.");
+    }
+
+    @ExceptionHandler(DiaryNotFoundException.class)
+    public ResponseEntity<String> DiaryNotFound(Exception e){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("다이어리를 찾을 수 없습니다.");
     }
 
 }
