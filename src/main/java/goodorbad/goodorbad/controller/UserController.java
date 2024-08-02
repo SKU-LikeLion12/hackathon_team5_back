@@ -65,7 +65,7 @@ public class UserController {
     }
 
     //아이디 찾기 - 이름, 이메일
-    @GetMapping("/find/userId")
+    @PostMapping("/find/userId")
     public String findUserIdByEmail(@RequestBody UserDTO.FindUserIdRequest request){
         return userService.findUserIdByEmailAndName(request.getEmail(),request.getName());
     }
