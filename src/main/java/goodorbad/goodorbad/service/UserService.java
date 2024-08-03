@@ -24,8 +24,8 @@ public class UserService {
     private final UserRepository userRepository;
 
     public User tokenToMember(String token){ //token을 넣으면 해당하는 userId를 찾아서
-//        return userRepository.findByUserId(jwtUtility.validateToken(token).getSubject());//userId 반환
-        return userRepository.findByUserId(jwtUtility.validateToken(token.substring(7)).getSubject());//userId 반환
+       return userRepository.findByUserId(jwtUtility.validateToken(token).getSubject());//userId 반환
+       // return userRepository.findByUserId(jwtUtility.validateToken(token.substring(7)).getSubject());//userId 반환
     }
 
     //회원 가입

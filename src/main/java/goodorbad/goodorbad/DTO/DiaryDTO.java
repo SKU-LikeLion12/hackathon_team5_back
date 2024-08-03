@@ -13,14 +13,22 @@ public class DiaryDTO {
         private LocalDate date;
         private String content;
         private String emotion;
-        private Long diaryId;
+//        private Long diaryId;
     }
 
     @Data
     public static class diaryUpdateRequest{
         private LocalDate date;
-        private Long diaryId;
         private String newContent;
         private String newEmotion;
     }
+
+    @Data
+    public static class diaryCreateRequest{
+        private LocalDate date;
+        private String content;
+        private String emotion;
+        private boolean goodMemory;
+    }
+
 }

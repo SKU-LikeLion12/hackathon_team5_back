@@ -44,12 +44,12 @@ public class GlobalExceptionHandler {
     //다이어리 수정
     @ExceptionHandler(DateNotFoundException.class)
     public ResponseEntity<String> DateNotFound(Exception e){
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("일치하는 날짜가 없습니다.");
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body("해당하는 날짜에 일기가 없습니다.");
     }
 
-    @ExceptionHandler(DiaryNotFoundException.class)
-    public ResponseEntity<String> DiaryNotFound(Exception e){
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("다이어리를 찾을 수 없습니다.");
+    @ExceptionHandler(DiaryAlreadyExistsException.class)
+    public ResponseEntity<String> DiaryAlreadyExists(Exception e){
+        return ResponseEntity.status(HttpStatus.CONFLICT).body("해당하는 날짜에 이미 일기가 존재합니다. 하루에 하나의 일기만 작성할 수 있습니다.");
     }
 
 }

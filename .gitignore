@@ -1,5 +1,4 @@
-echo ".DS_Store" >> .gitignore 
-echo "src/.DS_Store" >> .gitignore
+
 .DS_Store
 src/.DS_Store
 
@@ -38,6 +37,6 @@ out/
 /nbdist/
 /.nb-gradle/
 
-### VS Code ###
-.vscode/
+# Ignore config/application.properties
 config/application.properties
+application.properties

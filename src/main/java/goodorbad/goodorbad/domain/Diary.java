@@ -10,6 +10,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Entity
+@Setter
+@Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "user_id"})}) //날짜와 사용자아이디를 유니크
 public class Diary {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,44 +29,12 @@ public class Diary {
     @JoinColumn(name = "user_id")
     private User user; // Reference to the User entity
 
-//    // Getters and Setters
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-//
-//    public LocalDate getDate() {
-//        return date;
-//    }
-//
-//    public void setDate(LocalDate date) {
-//        this.date = date;
-//    }
-//
-//    public String getContent() {
-//        return content;
-//    }
-//
-//    public void setContent(String content) {
-//        this.content = content;
-//    }
-//
-//    public boolean isGoodMemory() {
-//        return goodMemory;
-//    }
-//
-//    public void setGoodMemory(boolean goodMemory) {
-//        this.goodMemory = goodMemory;
-//    }
-//
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
+    public Diary(LocalDate date,String content,String emotion,boolean goodMemory,User user){
+        this.setDate(date);
+        this.setContent(content);
+        this.setEmotion(emotion);
+        this.setGoodMemory(goodMemory);
+        this.setUser(user);
+    }
+
 }
