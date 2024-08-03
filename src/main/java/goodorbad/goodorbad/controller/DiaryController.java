@@ -32,7 +32,7 @@ public class DiaryController {
 
         diary.setUser(user);
         diaryService.saveDiary(diary);
-        return new DiaryDTO.diaryResponse(diary.getDate(),diary.getContent());
+        return new DiaryDTO.diaryResponse(diary.getDate(),diary.getContent(), diary.getEmotion(), diary.getId());
     }
 
     // 날짜로 일기 찾기
@@ -40,42 +40,33 @@ public class DiaryController {
     public List<DiaryDTO.diaryResponse> getDiariesByDate(
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
             @RequestHeader("Authorization") String token) {
-        // userId로 사용자를 찾습니다.
+
         User user = userService.tokenToMember(token);
         List<Diary> diaries = diaryService.getDiariesByDate(date, user);
         List<DiaryDTO.diaryResponse> response = diaries.stream()
-                .map(diary -> new DiaryDTO.diaryResponse(diary.getDate(), diary.getContent()))
+                .map(diary -> new DiaryDTO.diaryResponse(diary.getDate(), diary.getContent(), diary.getEmotion(), diary.getId()))
                 .collect(Collectors.toList());
 
         return response;
     }
-/////////////////////////////////////////////////////
+
     // 특정 다이어리 업데이트 (PUT 메서드)
-    @PutMapping("/{id}")
-    public ResponseEntity<Diary> updateDiary(
-            @PathVariable Long id,
-            @RequestBody Diary updatedDiary) {
-        // 해당 ID의 다이어리를 검색합니다.
-        Diary diary = diaryService.findById(id);
-        if (diary == null) {
-            return ResponseEntity.notFound().build();
-        }
-        // 다이어리 업데이트
-        diary.setDate(updatedDiary.getDate());
-        diary.setContent(updatedDiary.getContent());
-        diary.setGoodMemory(updatedDiary.isGoodMemory());
-        Diary savedDiary = diaryService.saveDiary(diary);
-        return ResponseEntity.ok(savedDiary);
+    @PutMapping("/update")
+    public DiaryDTO.diaryResponse updateDiary(@RequestBody DiaryDTO.diaryUpdateRequest request, @RequestHeader("Authorization") String token) {
+        User user = userService.tokenToMember(token);
+
+        Diary diary = diaryService.updateDiary(request.getDiaryId(), request.getDate(), request.getNewContent(), request.getNewEmotion(),user);
+        return new DiaryDTO.diaryResponse(diary.getDate(), diary.getContent(), diary.getEmotion(), diary.getId());
     }
 
-    // 특정 다이어리 삭제 (DELETE 메서드)
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDiary(@PathVariable Long id) {
-        Diary diary = diaryService.findById(id);
-        if (diary == null) {
-            return ResponseEntity.notFound().build();
-        }
-        diaryService.deleteDiary(id);
-        return ResponseEntity.noContent().build();
-    }
+//    // 특정 다이어리 삭제 (DELETE 메서드)
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> deleteDiary(@PathVariable Long id) {
+//        Diary diary = diaryService.findById(id);
+//        if (diary == null) {
+//            return ResponseEntity.notFound().build();
+//        }
+//        diaryService.deleteDiary(id);
+//        return ResponseEntity.noContent().build();
+//    }
 }
