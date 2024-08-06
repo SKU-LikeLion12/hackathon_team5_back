@@ -59,9 +59,9 @@ public class UserDTO {
         private String userId;
     }
 
-//    @Data
-//    public static class ResetPasswordRequest{
-//        private String token;
-//        private String newPassword;
-//    }
+    @Data
+    public static class ResetPasswordRequest{
+        private String token;
+        private String newPassword;
+    }
 }

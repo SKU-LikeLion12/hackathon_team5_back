@@ -73,6 +73,12 @@ public class UserService {
         return user;
     }
 
+    public User findByEmailAndUserId(String email,String userId){
+        User user=userRepository.findByEmailAndUserId(email,userId);
+        if (user==null) throw new IdNotFoundException();
+        return user;
+    }
+
     public void save(User user){
         userRepository.save(user);
     }

@@ -59,4 +59,15 @@ public class UserRepository {
             return null;
         }
     }
+
+    public User findByEmailAndUserId(String email,String userId){
+        try{
+            return em.createQuery("select u from User u where u.email=:e and u.userId=:ui", User.class)
+                    .setParameter("e",email)
+                    .setParameter("ui",userId)
+                    .getSingleResult();
+        }catch(NoResultException e){
+            return null;
+        }
+    }
 }

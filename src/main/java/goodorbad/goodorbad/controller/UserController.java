@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class UserController {
     private final UserService userService;
 
@@ -79,11 +80,11 @@ public class UserController {
         }
     }
 
-    //test
-    @GetMapping("/")
-    public String test(){
-        return "hello";
-    }
+//    //test
+//    @GetMapping("/")
+//    public String test(){
+//        return "hello";
+//    }
 
 
 }

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api")
 public class PasswordResetController {
     private final EmailService emailService;
     private final PasswordResetService passwordResetService;
@@ -21,15 +22,15 @@ public class PasswordResetController {
     @PostMapping("/forgot-password")
     public ResponseEntity<String> forgotPassword(@RequestBody UserDTO.FindPasswordRequest request) {
         //사용자 아이디, 이메일 검사 필요
-        User requestUser=userService.findByUserId(request.getUserId());
-        String token = passwordResetService.createPasswordResetToken(request.getEmail(),requestUser);
+//        User requestUser=userService.findByUserId(request.getUserId());
+        String token = passwordResetService.createPasswordResetToken(request.getEmail(),request.getUserId());
         emailService.sendPasswordResetEmail(request.getEmail(), token);
-        return ResponseEntity.status(HttpStatus.OK).body("비밀번호 재설정 링크가 이메일로 전송되었습니다.");
+        return ResponseEntity.status(HttpStatus.OK).body(token);
     }
 
     @PutMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestParam String token, @RequestParam String newPassword) {
-        passwordResetService.resetPassword(token, newPassword);
+    public ResponseEntity<String> resetPassword(@RequestBody UserDTO.ResetPasswordRequest request) {
+        passwordResetService.resetPassword(request.getToken(), request.getNewPassword());
         return ResponseEntity.status(HttpStatus.OK).body("비밀번호가 성공적으로 변경되었습니다.");
     }
 }

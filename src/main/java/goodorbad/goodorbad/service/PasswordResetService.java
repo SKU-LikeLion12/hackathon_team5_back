@@ -22,11 +22,11 @@ public class PasswordResetService {
     private final PasswordResetRepository tokenRepository;
     private static final long EXPIRATION_TIME = 1000 * 60 * 60; // 1시간
 
-    public String createPasswordResetToken(String email,User requestUser) {
-        User user = userService.findByEmail(email);
-        if (!user.getUserId().equals(requestUser.getUserId())) {
-            throw new EmailNotFoundException();
-        }
+    public String createPasswordResetToken(String email,String userId) {
+        User user = userService.findByEmailAndUserId(email,userId);
+//        if (!user.getUserId().equals(requestUser.getUserId())) {
+//            throw new EmailNotFoundException();
+//        }
             String token = UUID.randomUUID().toString(); //비밀번호 재설정을 위한 토큰 발행
 
             PasswordReset resetToken = new PasswordReset();
@@ -51,9 +51,9 @@ public class PasswordResetService {
         }
 
         User user = tokenRepository.findUserByToken(token);
-        if (user == null) {
-            throw new EmailNotFoundException();
-        }
+//        if (user == null) {
+//            throw new EmailNotFoundException();
+//        }
 
         //비밀번호 재설정, 토큰 제거
         user.setPassword(newPassword);
